@@ -365,6 +365,8 @@ class VCFReader(BaseReader):
 
         samples = vcf.samples
 
+        nucleotide_dict = {'A' : 1, 'C' : 2, 'G' : 3, 'T' : 4}
+
         # Iterate over all variants in variant list.
         for var_idx in range(num_variants):
             variant = variant_list[var_idx]
@@ -373,7 +375,7 @@ class VCFReader(BaseReader):
             for alt_idx, alt in enumerate(alts):
                 # This parser currently doesn't support gVCF files completely, hence any
                 # gVCF entries are ignored.
-                if alt == "." or alt == "<NON_REF>":
+                if alt == "." or alt == "<NON_REF>" or alt not in nucleotide_dict or len(alt) > 1 or len(variant.REF) > 1:
                     continue
 
                 # Add standard DF entries for each variant.
@@ -381,8 +383,8 @@ class VCFReader(BaseReader):
                 df_dict["start_pos"].append(variant.start)
                 df_dict["end_pos"].append(variant.end)
                 df_dict["id"].append(variant.ID)
-                df_dict["ref"].append(variant.REF)
-                df_dict["alt"].append(alt)
+                df_dict["ref"].append(nucleotide_dict[variant.REF])
+                df_dict["alt"].append(nucleotide_dict[alt])
                 df_dict["variant_type"].append(np.int32(self._detect_variant_type(variant.REF, alt)))
                 df_dict["quality"].append(variant.QUAL)
 

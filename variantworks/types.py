@@ -25,8 +25,8 @@ class VariantZygosity(IntEnum):
 
     NONE = -1
     NO_VARIANT = 0
-    HOMOZYGOUS = 1
-    HETEROZYGOUS = 2
+    HETEROZYGOUS = 1
+    HOMOZYGOUS = 2
 
 
 class VariantType(IntEnum):
